@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "83444334920",
+    "project_id": "ecomm-a123a",
+    "storage_bucket": "ecomm-a123a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:83444334920:android:db26bce9efce4ece6ff37d",
+        "android_client_info": {
+          "package_name": "com.cz.czadmin"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "83444334920-7b6ue6al52amqbpb8choblfrph6dm0s3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAXAQthnOTpqSoFZWcmVSQmCqCbEQjhV38"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "83444334920-7b6ue6al52amqbpb8choblfrph6dm0s3.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

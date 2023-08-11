@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".fragment.home"
+    android:orientation="vertical">
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/square_shape"
+        android:text="ADD CATAGORY"
+        android:textSize="30sp"
+        android:id="@+id/btncatagory"
+        android:layout_margin="10dp"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/square_shape"
+        android:text="ADD SUB CATAGORY"
+        android:textSize="30sp"
+        android:id="@+id/btnsubcatagory"
+        android:layout_margin="10dp"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/square_shape"
+        android:text="ADD PRODUCT"
+        android:textSize="30sp"
+        android:id="@+id/btnproduct"
+        android:layout_margin="10dp"/>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/square_shape"
+        android:text="ADD SLIDER"
+        android:textSize="30sp"
+        android:id="@+id/btnslider"
+        android:layout_margin="10dp"/>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/square_shape"
+        android:text="ALL ORDER"
+        android:textSize="30sp"
+        android:id="@+id/btnorder"
+        android:layout_margin="10dp"/>
+
+
+</LinearLayout>

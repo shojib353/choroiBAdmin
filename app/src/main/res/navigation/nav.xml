@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav"
+    app:startDestination="@id/home2">
+
+    <fragment
+        android:id="@+id/home2"
+        android:name="com.cz.czadmin.fragment.home"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_home2_to_catagory"
+            app:destination="@id/catagory" />
+        <action
+            android:id="@+id/action_home2_to_product"
+            app:destination="@id/product" />
+        <action
+            android:id="@+id/action_home2_to_slider"
+            app:destination="@id/slider" />
+        <action
+            android:id="@+id/action_home2_to_subcatagory"
+            app:destination="@id/subcatagory" />
+    </fragment>
+    <fragment
+        android:id="@+id/catagory"
+        android:name="com.cz.czadmin.fragment.catagory"
+        android:label="fragment_catagory"
+        tools:layout="@layout/fragment_catagory" />
+    <fragment
+        android:id="@+id/product"
+        android:name="com.cz.czadmin.fragment.product"
+        android:label="fragment_product"
+        tools:layout="@layout/fragment_product" >
+        <action
+            android:id="@+id/action_product_to_allProduct"
+            app:destination="@id/allProduct" />
+    </fragment>
+    <fragment
+        android:id="@+id/slider"
+        android:name="com.cz.czadmin.fragment.slider"
+        android:label="fragment_slider"
+        tools:layout="@layout/fragment_slider" />
+    <fragment
+        android:id="@+id/allProduct"
+        android:name="com.cz.czadmin.fragment.allProduct"
+        android:label="fragment_all_product"
+        tools:layout="@layout/fragment_all_product" >
+        <action
+            android:id="@+id/action_allProduct_to_editProductActivity"
+            app:destination="@id/editProductActivity" />
+    </fragment>
+    <activity
+        android:id="@+id/editProductActivity"
+        android:name="com.cz.czadmin.editProductActivity"
+        android:label="activity_edit_product"
+        tools:layout="@layout/activity_edit_product" />
+    <fragment
+        android:id="@+id/subcatagory"
+        android:name="com.cz.czadmin.fragment.subcatagory"
+        android:label="fragment_subcatagory"
+        tools:layout="@layout/fragment_subcatagory" />
+</navigation>
