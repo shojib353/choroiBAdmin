@@ -16,10 +16,12 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    @Suppress("DEPRECATION")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
        // onBackPressedDispatcher.addCallback(this,onBackPressedCallback)
+
 
     }
     private fun onBackPressedMethod() {

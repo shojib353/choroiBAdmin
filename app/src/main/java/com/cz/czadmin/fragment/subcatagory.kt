@@ -5,13 +5,14 @@ import android.app.Dialog
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
-import androidx.fragment.app.Fragment
+
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.fragment.app.Fragment
 import com.cz.czadmin.R
 import com.cz.czadmin.catdata
 import com.cz.czadmin.databinding.FragmentSubcatagoryBinding
@@ -20,15 +21,17 @@ import com.cz.czadmin.subcatdata
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
-import java.util.UUID
 
 
+@Suppress("Deprecated")
 class subcatagory : Fragment() {
     lateinit var binding:FragmentSubcatagoryBinding
     private lateinit var catagoryList:ArrayList<String>
     private var imgurl: Uri?=null
     private lateinit var dialog: Dialog
     var SubCatagoryCoverImageUrl:String?=""
+    var Key=Firebase.firestore.collection("subcatagory").document().id
+
 
     private var launchGalleryActivity = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -41,12 +44,16 @@ class subcatagory : Fragment() {
     }
 
 
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         setProductCatagory()
         getData()
+
+
 
         binding=FragmentSubcatagoryBinding.inflate(layoutInflater)
         dialog=Dialog(requireContext())
@@ -69,6 +76,8 @@ class subcatagory : Fragment() {
 
                 validedData(binding.subcatName.text.toString())
 
+
+
             }
         }
 
@@ -82,10 +91,12 @@ class subcatagory : Fragment() {
 
     private fun validedData(subCatName: String) {
         if (subCatName.isEmpty()){
+
             Toast.makeText(requireContext(),"input name of product", Toast.LENGTH_SHORT).show()
         }
 
         else if (imgurl==null) {
+
 
             Toast.makeText(requireContext(),"input IMAGE of product", Toast.LENGTH_SHORT).show()
 
@@ -97,10 +108,11 @@ class subcatagory : Fragment() {
     }
     private fun uploadimg() {
         dialog.show()
-        val fileName= UUID.randomUUID().toString()+".jpg"
 
-        val refStore= FirebaseStorage.getInstance().reference.child("subcatagory/$fileName")
-        refStore.putFile(imgurl!!)
+
+        //val refStore= FirebaseStorage.getInstance().reference.child("subcatagory/$fileName")
+        val refStores= FirebaseStorage.getInstance().getReference("subcatagory")
+        refStores.child(Key).putFile(imgurl!!)
             .addOnSuccessListener {
                 it.storage.downloadUrl.addOnSuccessListener { image->
                     SubCatagoryCoverImageUrl=image.toString()
@@ -116,16 +128,18 @@ class subcatagory : Fragment() {
         val db=Firebase.firestore
 
 
+
         val data= subcatdata(
             catagoryList[binding.productSubCatDrop.selectedItemPosition] ,
             SubCatagoryCoverImageUrl.toString(),
-            binding.subcatName.text.toString()
+            binding.subcatName.text.toString(),
+            Key
 
 
         )
 
 
-        db.collection("subcatagory").document().set(data)
+        db.collection("subcatagory").document(Key).set(data)
             .addOnSuccessListener {
                 dialog.dismiss()
                 binding.subcatimg.setImageDrawable(resources.getDrawable(R.drawable.img ))
@@ -152,10 +166,40 @@ class subcatagory : Fragment() {
                     val data=x.toObject(subcatdata::class.java)
                     list.add(data!!)
                 }
-                binding.subcatrecycle.adapter=subcatagoryAdapter(requireContext(),list)
+                val adapter=subcatagoryAdapter(requireContext(),list)
+                binding.subcatrecycle.adapter=adapter
+
+
+
+                adapter.setonclickL(object:subcatagoryAdapter.OnclickL{
+                    override fun onClick(position: Int, scmodel: subcatdata) {
+                        Toast.makeText(requireContext(),"one click",Toast.LENGTH_SHORT).show()
+                    }
+
+                    override fun onDelete(position: Int, scmodel: subcatdata) {
+                       var id= scmodel.productId.toString()
+                        FirebaseStorage.getInstance().getReference("subcatagory").child(id).delete()
+
+                        Firebase.firestore.collection("subcatagory").document(id).delete().addOnSuccessListener {
+                            list.removeAt(position)
+                            adapter.notifyItemRemoved(position)
+                            Toast.makeText(requireContext(),"delete",Toast.LENGTH_SHORT).show()
+
+
+
+                        }
+
+
+
+                    }
+
+
+                })
+
 
             }
     }
+
 
 
     private fun setProductCatagory(){
@@ -177,5 +221,8 @@ class subcatagory : Fragment() {
 
         }
     }
+
+
+
 
 }

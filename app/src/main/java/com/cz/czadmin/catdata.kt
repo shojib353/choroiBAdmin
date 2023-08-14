@@ -9,7 +9,8 @@ data class catdata(
 data class subcatdata(
     val productCatagory:String?="",
     val subCatagoryCoverImage:String?="",
-    val subCatagoryName:String?=""
+    val subCatagoryName:String?="",
+    val productId:String?=""
 
 
 )
