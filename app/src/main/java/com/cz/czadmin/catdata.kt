@@ -2,7 +2,8 @@ package com.cz.czadmin
 
 data class catdata(
     val productCatagory:String?="",
-    val productCoverImage:String?=""
+    val productCoverImage:String?="",
+    val productId:String?=""
 
 
 )
