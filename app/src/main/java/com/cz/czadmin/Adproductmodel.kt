@@ -7,7 +7,8 @@ data class Adproductmodel(
     val productCatagory:String?="",
     val productsubCatagory:String?="",
     val productId:String?="",
+    val productDId:String?="",
     val productMrp:String?="",
-    val productSp:String?="",
-    val productImage:ArrayList<String>
+    val productSp:String?=""
+   // val productImage:ArrayList<String>
 )

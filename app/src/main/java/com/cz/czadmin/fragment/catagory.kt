@@ -9,7 +9,6 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Adapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.GridLayoutManager
@@ -27,7 +26,8 @@ class catagory : Fragment() {
     private lateinit var binding:FragmentCatagoryBinding
     private var imgurl: Uri?=null
     private lateinit var dialog: Dialog
-    var Key=Firebase.firestore.collection("subcatagory").document().id
+
+        //Firebase.firestore.collection("subcatagory").document().id
 
 
 
@@ -107,9 +107,10 @@ class catagory : Fragment() {
                     override fun onDelete(position: Int, scmodel: catdata) {
 
                         var id= scmodel.productId.toString()
+                        var Did= scmodel.productDId.toString()
                         FirebaseStorage.getInstance().getReference("catagory").child(id).delete()
 
-                        Firebase.firestore.collection("catagory").document(id).delete().addOnSuccessListener {
+                        Firebase.firestore.collection("catagory").document(Did).delete().addOnSuccessListener {
                             list.removeAt(position)
                             adapter.notifyItemRemoved(position)
                             Toast.makeText(requireContext(),"delete",Toast.LENGTH_SHORT).show()
@@ -143,13 +144,14 @@ class catagory : Fragment() {
 
     private fun uploadimg(catName: String) {
         dialog.show()
+        var Key=UUID.randomUUID().toString()
 
 
         val refStores= FirebaseStorage.getInstance().getReference("catagory")
         refStores.child(Key).putFile(imgurl!!)
             .addOnSuccessListener {
                 it.storage.downloadUrl.addOnSuccessListener { image->
-                    storeData(catName,image.toString())
+                    storeData(catName,image.toString(),Key)
 
                 }
             }.addOnFailureListener{
@@ -158,15 +160,18 @@ class catagory : Fragment() {
             }
     }
 
-    private fun storeData(catName: String, url: String) {
+    private fun storeData(catName: String, url: String, Key: String) {
         val db=Firebase.firestore
+        val Did=db.collection("catagory").document().id
         val data= catdata(
             catName,
             url,
-            Key
+            Key,
+            Did
+
         )
 
-        db.collection("catagory").document(Key).set(data)
+        db.collection("catagory").document(Did).set(data)
             .addOnSuccessListener {
                 dialog.dismiss()
                 binding.imageView.setImageDrawable(resources.getDrawable(R.drawable.img ))

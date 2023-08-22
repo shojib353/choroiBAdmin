@@ -2,7 +2,6 @@ package com.cz.czadmin.fragment
 
 import android.app.Activity
 import android.app.Dialog
-import android.content.Context
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -12,13 +11,11 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.cz.czadmin.AdproductImageAdaptar
 import com.cz.czadmin.Adproductmodel
 import com.cz.czadmin.R
-import com.cz.czadmin.catdata
 import com.cz.czadmin.databinding.FragmentProductBinding
 import com.cz.czadmin.subcatdata
 import com.google.firebase.firestore.ktx.firestore
@@ -37,6 +34,9 @@ class product : Fragment() {
     private lateinit var dialog:Dialog
     private var coverImageUrl:String?=""
     private lateinit var subCatagoryList:ArrayList<String>
+
+        //Firebase.firestore.collection("products").document().id
+
 
 
 
@@ -122,23 +122,24 @@ class product : Fragment() {
 
         }else if (coverimage==null){
             Toast.makeText(requireContext(),"selecet cover image",Toast.LENGTH_SHORT).show()
-        }else if (list.size<1){
-            Toast.makeText(requireContext(),"selecet product images",Toast.LENGTH_SHORT).show()
-        }else{
+        }//else if (list.size<1){
+           // Toast.makeText(requireContext(),"selecet product images",Toast.LENGTH_SHORT).show()
+       // }
+    else{
             uploadImage()
         }
     }
 
     private fun uploadImage() {
         dialog.show()
-        val fileName= UUID.randomUUID().toString()+".jpg"
-
-        val refStore= FirebaseStorage.getInstance().reference.child("products/$fileName")
-        refStore.putFile(coverimage!!)
+        var Key:String =UUID.randomUUID().toString()
+        val refStores= FirebaseStorage.getInstance().getReference("products")
+        refStores.child(Key).putFile(coverimage!!)
             .addOnSuccessListener {
                 it.storage.downloadUrl.addOnSuccessListener { image->
                     coverImageUrl=image.toString()
-                    uploadProductImage()
+                   // uploadProductImage()
+                    storeData(Key)
 
                 }
             }.addOnFailureListener{
@@ -146,55 +147,55 @@ class product : Fragment() {
                 Toast.makeText(requireContext(),"something wrong",Toast.LENGTH_SHORT).show()
             }
     }
-    private var i=0
-    private fun uploadProductImage() {
-        dialog.show()
-        val fileName=UUID.randomUUID().toString()+".jpg"
+   // private var i=0
+   // private fun uploadProductImage() {
+     //   dialog.show()
+     //   val fileName=UUID.randomUUID().toString()+".jpg"
 
-        val refStore=FirebaseStorage.getInstance().reference.child("products/$fileName")
-        refStore.putFile(list[i]!!)
-            .addOnSuccessListener {
-                it.storage.downloadUrl.addOnSuccessListener { image->
+      //  val refStore=FirebaseStorage.getInstance().reference.child("products/$fileName")
+      //  refStore.putFile(list[i]!!)
+          //  .addOnSuccessListener {
+             //   it.storage.downloadUrl.addOnSuccessListener { image->
 
-                    listimages.add(image!!.toString())
-                    binding.productCImage.setImageURI(null)
+              //      listimages.add(image!!.toString())
+               //     binding.productCImage.setImageURI(null)
 
-                    if (list.size==listimages.size){
-                    storeData()
-                    }else{
-                        i+=1
-                        uploadProductImage()
-                    }
+                //    if (list.size==listimages.size){
+                 //   storeData()
+                 //   }else{
+                       // i+=1
+                       // uploadProductImage()
+                   // }
 
-                }
-            }.addOnFailureListener{
+                //}
+         /*   }.addOnFailureListener{
                 dialog.dismiss()
                 Toast.makeText(requireContext(),"something wrong",Toast.LENGTH_SHORT).show()
             }
-    }
+    }*/
 
-    private fun storeData() {
-        val db=Firebase.firestore.collection("products")
-        val key=db.document().id
+    private fun storeData(Key: String) {
+        val db=Firebase.firestore
+        val Did=db.collection("products").document().id
         val data=Adproductmodel(
             binding.productname.text.toString(),
             binding.productdes.text.toString(),
             coverImageUrl.toString(),
             null,
             subCatagoryList[binding.productCatDrop.selectedItemPosition],
-            key,
+            Key,
+            Did,
             binding.productmrp.text.toString(),
             binding.productsp.text.toString(),
-            listimages
+            //listimages
 
         )
-        db.document(key).set(data).addOnSuccessListener {
+        db.collection("products").document(Did).set(data).addOnSuccessListener {
             binding.productCImage.setImageURI(null)
             binding.productname.text=null
             binding.productdes.text=null
             binding.productmrp.text=null
             binding.productsp.text=null
-            list.clear()
             listimages.clear()
 
             dialog.dismiss()

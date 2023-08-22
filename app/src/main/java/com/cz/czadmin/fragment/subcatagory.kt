@@ -21,6 +21,7 @@ import com.cz.czadmin.subcatdata
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import java.util.UUID
 
 
 @Suppress("Deprecated")
@@ -30,7 +31,8 @@ class subcatagory : Fragment() {
     private var imgurl: Uri?=null
     private lateinit var dialog: Dialog
     var SubCatagoryCoverImageUrl:String?=""
-    var Key=Firebase.firestore.collection("subcatagory").document().id
+
+        //Firebase.firestore.collection("subcatagory").document().id
 
 
     private var launchGalleryActivity = registerForActivityResult(
@@ -111,12 +113,13 @@ class subcatagory : Fragment() {
 
 
         //val refStore= FirebaseStorage.getInstance().reference.child("subcatagory/$fileName")
+        var Key=UUID.randomUUID().toString()
         val refStores= FirebaseStorage.getInstance().getReference("subcatagory")
         refStores.child(Key).putFile(imgurl!!)
             .addOnSuccessListener {
                 it.storage.downloadUrl.addOnSuccessListener { image->
                     SubCatagoryCoverImageUrl=image.toString()
-                    storeData()
+                    storeData(Key)
 
                 }
             }.addOnFailureListener{
@@ -124,8 +127,9 @@ class subcatagory : Fragment() {
                 Toast.makeText(requireContext(),"something wrong",Toast.LENGTH_SHORT).show()
             }
     }
-    private fun storeData() {
+    private fun storeData(Key: String) {
         val db=Firebase.firestore
+        val Did=db.collection("subcatagory").document().id
 
 
 
@@ -133,13 +137,15 @@ class subcatagory : Fragment() {
             catagoryList[binding.productSubCatDrop.selectedItemPosition] ,
             SubCatagoryCoverImageUrl.toString(),
             binding.subcatName.text.toString(),
-            Key
+            Key,
+            Did
+
 
 
         )
 
 
-        db.collection("subcatagory").document(Key).set(data)
+        db.collection("subcatagory").document(Did).set(data)
             .addOnSuccessListener {
                 dialog.dismiss()
                 binding.subcatimg.setImageDrawable(resources.getDrawable(R.drawable.img ))
@@ -178,9 +184,10 @@ class subcatagory : Fragment() {
 
                     override fun onDelete(position: Int, scmodel: subcatdata) {
                        var id= scmodel.productId.toString()
+                        var Did=scmodel.productDId.toString()
                         FirebaseStorage.getInstance().getReference("subcatagory").child(id).delete()
 
-                        Firebase.firestore.collection("subcatagory").document(id).delete().addOnSuccessListener {
+                        Firebase.firestore.collection("subcatagory").document(Did).delete().addOnSuccessListener {
                             list.removeAt(position)
                             adapter.notifyItemRemoved(position)
                             Toast.makeText(requireContext(),"delete",Toast.LENGTH_SHORT).show()

@@ -120,6 +120,7 @@
                     android:id="@+id/product_img_btn"
                     android:textAllCaps="false"
                     android:text="select product image"
+                    android:visibility="gone"
                     />
                 <androidx.recyclerview.widget.RecyclerView
                     android:layout_width="match_parent"
@@ -128,7 +129,8 @@
                     tools:listitem="@layout/image_item"
                     app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
                     android:id="@+id/product_img_recycler"
-                    android:orientation="horizontal"/>
+                    android:orientation="horizontal"
+                    android:visibility="gone"/>
 
 
 
@@ -140,6 +142,7 @@
                     android:id="@+id/submit_product_btn"
                     android:textAllCaps="false"
                     android:text="Add Product"
+
                     />
                 <com.google.android.material.button.MaterialButton
                     android:layout_width="match_parent"

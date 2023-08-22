@@ -1,9 +1,11 @@
 package com.cz.czadmin
 
+import android.content.Intent
 import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Toast
+import androidx.navigation.findNavController
 import com.cz.czadmin.databinding.ActivityEditProductBinding
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -39,7 +41,9 @@ class editProductActivity : AppCompatActivity() {
             Firebase.firestore.collection("products").document(pid!!).update(update)
                 .addOnSuccessListener {
                     Toast.makeText(this,"UPDATE DONE",Toast.LENGTH_SHORT).show()
-                    adaptarp.notifyDataSetChanged()
+                   // val intent= Intent(this, MainActivity::class.java)
+                  //  startActivity(intent)
+
 
 
 
